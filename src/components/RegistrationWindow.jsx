@@ -70,12 +70,6 @@ export const CompanyInputTag = styled.input`
   }
 `;
 
-export const CompanyPWrong = styled.p`
-  display: none;
-  font-size: 20px;
-  color: red;
-`;
-
 export const NumberInputTag = styled(CompanyInputTag)`
   width: 178px;
   height: 48px;
@@ -200,7 +194,6 @@ function RegWindow() {
                 name="company"
                 placeholder=" Type Text"
               />
-              <CompanyPWrong>Put info</CompanyPWrong>
             </Wrapper>
             <Wrapper>
               <PTag>Number of people*</PTag>
