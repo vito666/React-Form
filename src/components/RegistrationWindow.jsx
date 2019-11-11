@@ -21,7 +21,7 @@ export const MainWrapper = styled.div`
 
 export const Form = styled.form`
   margin: 0;
-  padding: 0;
+  padding-top: 20px;
   font-family: "Open Sans";
 `;
 
@@ -79,7 +79,7 @@ export const CompanyPWrong = styled.p`
 export const NumberInputTag = styled(CompanyInputTag)`
   width: 178px;
   height: 48px;
-  ${({ error }) => error && `background: red`}
+  ${({ error }) => error && `border: 1px solid #F15557;`}
 `;
 
 export const BussinessContainer = styled.div`
@@ -161,6 +161,7 @@ function RegWindow() {
   const [descValue, setDescValue] = useState("");
   const [bussnAreaVal, setBussnAreaVal] = useState("");
   const [countVal, setCountVal] = useState("");
+  const [peopleVal, setPeopleVal] = useState("");
   const [counter, setCount] = useState(0);
   const [companyName, setCompanyName] = useState("");
 
@@ -173,14 +174,15 @@ function RegWindow() {
   };
 
   const onSubmit = () => {
-    if (descValue && countVal && bussnAreaVal && companyName)
+    if (descValue && countVal && bussnAreaVal && companyName && peopleVal)
       return console.log(
-        `Company name - ${companyName},\n Bussiness Area - ${bussnAreaVal},\n Description - ${descValue},\n Uploaded files - ${counter}`
+        `Company name - ${companyName},\n Bussiness Area - ${bussnAreaVal},\n Description - ${descValue},\n Uploaded files - ${counter}, Number of People - ${peopleVal}`
       );
     return console.log("error");
   };
 
   const onChange = e => {
+    setPeopleVal(e.target.value);
     setCountVal(e.target.value);
     const isError = checkValue(e.target.value);
     return setError(!isError);
