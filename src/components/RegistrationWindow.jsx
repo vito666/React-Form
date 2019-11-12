@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import DragDrop from "./DragDrop";
 import styled from "styled-components";
 import { checkValue } from "../utils/validationType";
@@ -76,6 +76,13 @@ export const NumberInputTag = styled(CompanyInputTag)`
   ${({ error }) => error && `border: 1px solid #F15557;`}
 `;
 
+export const NumberError = styled.p`
+  display: none;
+  font-size: 10px;
+  color: red;
+  ${({ error }) => !error && `display: block; margin:0;`}
+`;
+
 export const BussinessContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -92,6 +99,13 @@ export const BussinessInputTag = styled(CompanyInputTag)`
   @media (max-width: 623px) {
     width: 80%;
   }
+  ${({ errorBussnName }) => errorBussnName && `border: 1px red solid`}
+`;
+export const BussinessNameError = styled.p`
+  display: none;
+  font-size: 10px;
+  color: red;
+  ${({ errorBussnName }) => errorBussnName && `display: block; margin:0;`}
 `;
 
 export const DescriptionContainer = styled.div`
@@ -118,6 +132,13 @@ export const DescriptionTextarea = styled.textarea`
     align-items: center;
     width: 80%;
   }
+  ${({ errorDesc }) => errorDesc && `border: 1px red solid`}
+`;
+export const DescriptionError = styled.p`
+  display: none;
+  font-size: 10px;
+  color: red;
+  ${({ errorDesc }) => errorDesc && `display: block;margin: 0`}
 `;
 
 export const ButtonSection = styled.div`
@@ -152,6 +173,8 @@ export const ButtonText = styled.p`
 
 function RegWindow() {
   const [error, setError] = useState();
+  const [errorDesc, setErrorDesc] = useState();
+  const [errorBussnName, setErrorBussnName] = useState();
   const [descValue, setDescValue] = useState("");
   const [bussnAreaVal, setBussnAreaVal] = useState("");
   const [countVal, setCountVal] = useState("");
@@ -159,20 +182,26 @@ function RegWindow() {
   const [counter, setCount] = useState(0);
   const [companyName, setCompanyName] = useState("");
 
-  useEffect(() => {
-    console.log(error);
-  }, [error]);
-
   const fileLoadHandler = props => {
     setCount(props);
   };
 
   const onSubmit = () => {
-    if (descValue && countVal && bussnAreaVal && companyName && peopleVal)
+    if (descValue && countVal && bussnAreaVal && peopleVal) {
       return console.log(
         `Company name - ${companyName},\n Bussiness Area - ${bussnAreaVal},\n Description - ${descValue},\n Uploaded files - ${counter}, Number of People - ${peopleVal}`
       );
-    return console.log("error");
+    } else if (!descValue && !bussnAreaVal && !error) {
+      setErrorDesc(true);
+      setErrorBussnName(true);
+      setError(true);
+    } else if (!descValue) {
+      setErrorDesc(true);
+    } else if (!bussnAreaVal) {
+      setErrorBussnName(true);
+    } else if (error) {
+      setError(true);
+    }
   };
 
   const onChange = e => {
@@ -202,29 +231,43 @@ function RegWindow() {
                 placeholder="1-99"
                 error={error}
               />
+              {error && <div> Put Number</div>}
+              <NumberError error={!error} />
             </Wrapper>
           </CompanyContainer>
           <BussinessContainer>
             <PTag>Bussiness area*</PTag>
             <BussinessInputTag
               placeholder="Design, Development, etc."
-              onChange={e => setBussnAreaVal(e.target.value)}
-              error={error}
+              errorBussnName={errorBussnName}
+              onChange={e =>
+                e.target.value === ""
+                  ? setErrorBussnName(true)
+                  : setBussnAreaVal(e.target.value) || setErrorBussnName(false)
+              }
             />
+            <BussinessNameError errorBussnName={errorBussnName}>
+              Put info
+            </BussinessNameError>
           </BussinessContainer>
           <DescriptionContainer>
             <PTag>Description*</PTag>
             <DescriptionTextarea
               placeholder="Type Text"
-              onChange={e => setDescValue(e.target.value)}
-              error={error}
+              errorDesc={errorDesc}
+              onChange={e =>
+                e.target.value === ""
+                  ? setErrorDesc(true)
+                  : setDescValue(e.target.value) || setErrorDesc(false)
+              }
             />
+            <DescriptionError errorDesc={errorDesc}>Put info</DescriptionError>
           </DescriptionContainer>
 
           <DragDrop
             counter={counter}
             fileLoadHandler={fileLoadHandler}
-            onChange={e => setCountVal(e.target.value, fileLoadHandler)}
+            onChange={e => setCountVal(e.target.value)}
           />
 
           <ButtonSection>
