@@ -32,7 +32,7 @@ export const CompanyContainer = styled.div`
   @media (max-width: 623px) {
     justify-content: space-around;
   }
-  @media (max-width: 400px) {
+  @media (max-width: 425px) {
     flex-direction: column;
     align-items: center;
   }
@@ -48,7 +48,7 @@ export const PTag = styled.p`
   font-size: 14px;
   line-height: 100%;
   color: #636363;
-  @media (max-width: 400px) {
+  @media (max-width: 425px) {
     text-align: center;
   }
 `;
@@ -56,7 +56,7 @@ export const PTag = styled.p`
 export const CompanyInputTag = styled.input`
   background: #f9f9f9;
   border-radius: 8px;
-  border: none;
+  border: 1px solid #c7c7c7;
   width: 280px;
   height: 48px;
   font-size: 20px;
@@ -65,7 +65,7 @@ export const CompanyInputTag = styled.input`
   @media (max-width: 623px) {
     width: 160px;
   }
-  @media (max-width: 400px) {
+  @media (max-width: 425px) {
     width: 90%;
   }
 `;
@@ -73,14 +73,14 @@ export const CompanyInputTag = styled.input`
 export const NumberInputTag = styled(CompanyInputTag)`
   width: 178px;
   height: 48px;
-  ${({ error }) => error && `border: 1px solid #F15557;`}
+  ${({ numberError }) => numberError && `border: 1px solid #F15557;`}
 `;
 
 export const NumberError = styled.p`
   display: none;
   font-size: 10px;
   color: red;
-  ${({ error }) => !error && `display: block; margin:0;`}
+  ${({ numberError }) => numberError && `display: block; margin:0;`}
 `;
 
 export const BussinessContainer = styled.div`
@@ -99,13 +99,13 @@ export const BussinessInputTag = styled(CompanyInputTag)`
   @media (max-width: 623px) {
     width: 80%;
   }
-  ${({ errorBussnName }) => errorBussnName && `border: 1px red solid`}
+  ${({ bussArea }) => bussArea && `border: 1px red solid`}
 `;
 export const BussinessNameError = styled.p`
   display: none;
   font-size: 10px;
   color: red;
-  ${({ errorBussnName }) => errorBussnName && `display: block; margin:0;`}
+  ${({ bussArea }) => bussArea && `display: block; margin:0;`}
 `;
 
 export const DescriptionContainer = styled.div`
@@ -123,7 +123,7 @@ export const DescriptionTextarea = styled.textarea`
   height: 168px;
   background: #f9f9f9;
   border-radius: 8px;
-  border: none;
+  border: 1px solid #c7c7c7;
   font-size: 20px;
   padding: 16px 12px;
   resize: none;
@@ -132,13 +132,13 @@ export const DescriptionTextarea = styled.textarea`
     align-items: center;
     width: 80%;
   }
-  ${({ errorDesc }) => errorDesc && `border: 1px red solid`}
+  ${({ description }) => description && `border: 1px red solid`}
 `;
 export const DescriptionError = styled.p`
   display: none;
   font-size: 10px;
   color: red;
-  ${({ errorDesc }) => errorDesc && `display: block;margin: 0`}
+  ${({ description }) => description && `display: block;margin: 0`}
 `;
 
 export const ButtonSection = styled.div`
@@ -172,54 +172,79 @@ export const ButtonText = styled.p`
 `;
 
 function RegWindow() {
-  const [error, setError] = useState();
-  const [errorDesc, setErrorDesc] = useState();
-  const [errorBussnName, setErrorBussnName] = useState();
-  const [descValue, setDescValue] = useState("");
-  const [bussnAreaVal, setBussnAreaVal] = useState("");
-  const [countVal, setCountVal] = useState("");
-  const [peopleVal, setPeopleVal] = useState("");
-  const [counter, setCount] = useState(0);
-  const [companyName, setCompanyName] = useState("");
+  const [counter, setCounter] = useState(0);
+  const [inputValue, setInputValue] = useState({
+    companyName: "",
+    NumOfPeople: "",
+    bussArea: "",
+    description: ""
+  });
+  const [error, setError] = useState({
+    NumOfPeople: "",
+    bussArea: "",
+    description: ""
+  });
 
   const fileLoadHandler = props => {
-    setCount(props);
+    setCounter(props);
+    console.log(props);
   };
 
   const onSubmit = () => {
-    if (descValue && countVal && bussnAreaVal && peopleVal) {
-      return console.log(
-        `Company name - ${companyName},\n Bussiness Area - ${bussnAreaVal},\n Description - ${descValue},\n Uploaded files - ${counter}, Number of People - ${peopleVal}`
+    if (
+      !error.NumOfPeople &&
+      !error.bussArea &&
+      !error.description &&
+      inputValue.NumOfPeople !== "" &&
+      inputValue.bussArea !== "" &&
+      inputValue.description !== ""
+    ) {
+      return alert(
+        `\n Company name - ${inputValue.companyName},\n Number of People - ${inputValue.NumOfPeople},\n Bussiness Area - ${inputValue.bussArea},\n Description - ${inputValue.description},\n Uploaded files - ${counter}`
       );
-    } else if (!descValue && !bussnAreaVal && !error) {
-      setErrorDesc(true);
-      setErrorBussnName(true);
-      setError(true);
-    } else if (!descValue) {
-      setErrorDesc(true);
-    } else if (!bussnAreaVal) {
-      setErrorBussnName(true);
-    } else if (error) {
-      setError(true);
+    } else {
+      return alert("error");
     }
   };
 
-  const onChange = e => {
-    setPeopleVal(e.target.value);
-    setCountVal(e.target.value);
+  // const onSubmit = () => {
+  //   if (descValue && countVal && bussnAreaVal && peopleVal) {
+  //     return console.log(
+  //       `Company name - ${companyName},\n Bussiness Area - ${bussnAreaVal},\n Description - ${descValue},\n Uploaded files - ${counter}, Number of People - ${peopleVal}`
+  //     );
+  //   } else if (!descValue && !bussnAreaVal && !error) {
+  //     setErrorDesc(true);
+  //     setErrorBussnName(true);
+  //     setError(true);
+  //   } else if (!descValue) {
+  //     setErrorDesc(true);
+  //   } else if (!bussnAreaVal) {
+  //     setErrorBussnName(true);
+  //   } else if (error) {
+  //     setError(true);
+  //   }
+  // };
+
+  const NumOfPeopleValidation = e => {
+    setInputValue({
+      ...inputValue,
+      NumOfPeople: e.target.value
+    });
     const isError = checkValue(e.target.value);
-    return setError(!isError);
+    return setError({ ...error, NumOfPeople: !isError });
   };
 
   return (
     <MainWindow>
       <MainWrapper>
-        <Form onSubmit={onSubmit}>
+        <Form>
           <CompanyContainer>
             <Wrapper>
               <PTag>Your company name</PTag>
               <CompanyInputTag
-                onChange={e => setCompanyName(e.target.value)}
+                onChange={e =>
+                  setInputValue({ ...inputValue, companyName: e.target.value })
+                }
                 name="company"
                 placeholder=" Type Text"
               />
@@ -227,26 +252,30 @@ function RegWindow() {
             <Wrapper>
               <PTag>Number of people*</PTag>
               <NumberInputTag
-                onChange={onChange}
+                onChange={NumOfPeopleValidation}
                 placeholder="1-99"
-                error={error}
+                numberError={error.NumOfPeople}
               />
-              {error && <div> Put Number</div>}
-              <NumberError error={!error} />
+              <NumberError numberError={error.NumOfPeople}>
+                Put Number from 1 to 99
+              </NumberError>
             </Wrapper>
           </CompanyContainer>
           <BussinessContainer>
             <PTag>Bussiness area*</PTag>
             <BussinessInputTag
               placeholder="Design, Development, etc."
-              errorBussnName={errorBussnName}
+              bussArea={error.bussArea}
               onChange={e =>
                 e.target.value === ""
-                  ? setErrorBussnName(true)
-                  : setBussnAreaVal(e.target.value) || setErrorBussnName(false)
+                  ? setError({ ...error, bussArea: true })
+                  : setInputValue({
+                      ...inputValue,
+                      bussArea: e.target.value
+                    }) || setError({ ...error, bussArea: false })
               }
             />
-            <BussinessNameError errorBussnName={errorBussnName}>
+            <BussinessNameError bussArea={error.bussArea}>
               Put info
             </BussinessNameError>
           </BussinessContainer>
@@ -254,21 +283,22 @@ function RegWindow() {
             <PTag>Description*</PTag>
             <DescriptionTextarea
               placeholder="Type Text"
-              errorDesc={errorDesc}
+              description={error.description}
               onChange={e =>
                 e.target.value === ""
-                  ? setErrorDesc(true)
-                  : setDescValue(e.target.value) || setErrorDesc(false)
+                  ? setError({ ...error, description: true })
+                  : setInputValue({
+                      ...inputValue,
+                      description: e.target.value
+                    }) || setError({ ...error, description: false })
               }
             />
-            <DescriptionError errorDesc={errorDesc}>Put info</DescriptionError>
+            <DescriptionError description={error.description}>
+              Put info
+            </DescriptionError>
           </DescriptionContainer>
 
-          <DragDrop
-            counter={counter}
-            fileLoadHandler={fileLoadHandler}
-            onChange={e => setCountVal(e.target.value)}
-          />
+          <DragDrop counter={counter} fileLoadHandler={fileLoadHandler} />
 
           <ButtonSection>
             <Button type="submit" onClick={onSubmit}>
