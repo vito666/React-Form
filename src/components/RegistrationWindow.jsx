@@ -207,24 +207,6 @@ function RegWindow() {
     }
   };
 
-  // const onSubmit = () => {
-  //   if (descValue && countVal && bussnAreaVal && peopleVal) {
-  //     return console.log(
-  //       `Company name - ${companyName},\n Bussiness Area - ${bussnAreaVal},\n Description - ${descValue},\n Uploaded files - ${counter}, Number of People - ${peopleVal}`
-  //     );
-  //   } else if (!descValue && !bussnAreaVal && !error) {
-  //     setErrorDesc(true);
-  //     setErrorBussnName(true);
-  //     setError(true);
-  //   } else if (!descValue) {
-  //     setErrorDesc(true);
-  //   } else if (!bussnAreaVal) {
-  //     setErrorBussnName(true);
-  //   } else if (error) {
-  //     setError(true);
-  //   }
-  // };
-
   const NumOfPeopleValidation = e => {
     setInputValue({
       ...inputValue,
